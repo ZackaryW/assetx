@@ -1,0 +1,71 @@
+destination: assetx.dart
+cache:
+  memory: false
+  src: lib/cache.dart
+
+sources_include:
+  - path: assets/
+    recursive: true
+    ignore:
+      - "*.exe"
+  
+sources_exclude:
+    - path: assets/exclude/
+      recursive: true
+
+patterns_include:
+  - "*.png"
+  - "*.jpg"
+  - "*.jpeg"
+
+patterns_exclude:
+  - "*.tmp"
+
+type_registry:  
+  image:
+    file_extensions:
+      - png
+      - jpg
+      - jpeg
+      - gif
+  data:
+    file_extensions:
+      - json
+      - yaml
+      - yml
+
+  env:
+    file_extensions:  
+      - env
+
+  custom:
+    pattern:
+      - "*/data.json"
+
+  custom2:
+    pattern:
+      - "*/data.toml"
+
+  custom3:
+    pattern:
+      - "*whatever*"
+
+map_registry:
+  image:
+    builtin: imagex
+  data: 
+    builtin: datax
+  env: 
+    builtin: envx
+
+  custom:
+    src: "lib/models.dart::Custom"
+
+  custom2:
+    src: "lib/models.dart::Custom2.fromToml"
+    passIn: path
+
+  custom3:
+    src: "lib/models.dart::Custom3.fromDict"
+    passIn: json
+

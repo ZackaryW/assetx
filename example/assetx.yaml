@@ -1,0 +1,54 @@
+destination: lib/generated_assets.dart
+local_destination: lib/generated_local.dart
+
+cache:
+  memory: true
+  src: lib/asset_cache.dart
+
+sources_include:
+  - path: assets/
+    recursive: true
+  - path: coolassets/
+    recursive: true
+    ignore:
+      - "*.tmp"
+
+patterns_include:
+  - "*.png"
+  - "*.jpg"
+  - "*.jpeg"
+  - "*.gif"
+  - "*.json"
+  - "*.yaml"
+  - "*.yml"
+  - "*.ww"
+
+patterns_exclude:
+  - "*.log"
+  - "*.tmp"
+  - "*folderexclude/*"
+
+type_registry:
+  image:
+    file_extensions:
+      - png
+      - jpg
+      - jpeg
+      - gif
+  data:
+    file_extensions:
+      - json
+      - yaml
+      - yml
+      - ww
+  custom:
+    pattern:
+      - "*/data/*"
+
+map_registry:
+  image:
+    builtin: imagex
+  data:
+    builtin: datax
+  custom:
+    src: "lib/custom_handler.dart::CustomAsset"

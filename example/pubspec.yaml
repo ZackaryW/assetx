@@ -1,0 +1,32 @@
+name: example
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  assetx:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  test: ^1.24.0
+
+  flutter_lints: ^5.0.0
+
+flutter:
+
+
+  assets:
+    - assets/data/
+    - assets/folder/foldersub/foldersub2/
+    - assets/image/
+    - coolassets/data1/datachild/
+    - coolassets/image1/image2/
