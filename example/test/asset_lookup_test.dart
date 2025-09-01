@@ -88,7 +88,7 @@ void main() {
       expect(rootFolder.children.length, equals(2));
       expect(rootFolder.children, contains(subFolder));
       expect(rootFolder.children, contains(imageFile));
-      
+
       expect(subFolder.children.length, equals(1));
       expect(subFolder.children, contains(jsonFile));
     });
@@ -96,7 +96,7 @@ void main() {
     test('fullyIndexed property works correctly', () {
       expect(rootFolder.fullyIndexed, isTrue);
       expect(subFolder.fullyIndexed, isTrue);
-      
+
       final partialFolder = AssetLookupFolder('partial', null, false);
       expect(partialFolder.fullyIndexed, isFalse);
     });

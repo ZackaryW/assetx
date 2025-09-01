@@ -1,4 +1,3 @@
-
 class AssetXMemoryCache {
   static final Map<String, dynamic> _cache = {};
 

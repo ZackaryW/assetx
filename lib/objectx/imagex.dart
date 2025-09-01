@@ -10,7 +10,9 @@ class ImageX extends BaseX {
         !path.endsWith('.webp') &&
         !path.endsWith('.gif') &&
         !path.endsWith('.bmp')) {
-      throw Exception('ImageX only supports jpg, jpeg, png, webp, gif, and bmp files.');
+      throw Exception(
+        'ImageX only supports jpg, jpeg, png, webp, gif, and bmp files.',
+      );
     }
   }
 
@@ -25,5 +27,4 @@ class ImageX extends BaseX {
     BaseX.setCacheMethod(path, image);
     return image;
   }
-
 }

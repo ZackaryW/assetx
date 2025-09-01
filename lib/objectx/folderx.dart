@@ -51,5 +51,3 @@ class FolderX extends BaseX {
     return BaseX.getCacheMethod<T>(assetPath(fileName))!;
   }
 }
-
-
