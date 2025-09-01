@@ -1,5 +1,5 @@
 name: assetx
-description: "A simple asset mapping package with shell integration"
+description: "Type-safe asset mapping for Flutter. Generates nested Dart code for easy asset access."
 version: 0.0.1
 homepage: https://github.com/ZackaryW/assetx
 
