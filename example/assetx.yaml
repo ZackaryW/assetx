@@ -40,7 +40,6 @@ type_registry:
       - json
       - yaml
       - yml
-      - ww
   custom:
     pattern:
       - "*/data/*"

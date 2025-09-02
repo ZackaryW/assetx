@@ -16,7 +16,7 @@ class ImageX extends BaseX {
     }
 
     if (!lazy) {
-      asset;
+      Future.microtask(() => asset);
     }
   }
 

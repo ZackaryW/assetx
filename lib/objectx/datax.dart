@@ -1,17 +1,9 @@
 import 'package:assetx/objectx/basex.dart';
+import 'package:assetx/utils/io/ioext.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
 
 class DataX extends BaseX {
-  DataX(super.path, {super.lazy = true}) {
-    // if not json
-    if (!path.endsWith('.json')) {
-      throw Exception('DataX only supports json files.');
-    }
-    if (!lazy) {
-      asset;
-    }
-  }
+  DataX(super.path);
 
   Future<Map<String, dynamic>> get asset async {
     final cached = BaseX.getCacheMethod<Map<String, dynamic>>(path);
@@ -20,9 +12,23 @@ class DataX extends BaseX {
     }
 
     // If not cached, load the data
-    final rawMap = await rootBundle.loadString(path);
-    final map = json.decode(rawMap) as Map<String, dynamic>;
+    final rawString = await rootBundle.loadString(path);
+    final map = IoExt.auto(path, rawString, (path) => DataX(path));
     BaseX.setCacheMethod(path, map);
     return Map.unmodifiable(map);
+  }
+
+  dynamic operator [](String key) async {
+    final asset = await this.asset;
+    if (key.contains(".")) {
+      final keys = key.split(".");
+      dynamic value = asset;
+      for (final k in keys) {
+        value = value[k];
+      }
+      return value;
+    }
+
+    return asset[key];
   }
 }

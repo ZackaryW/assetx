@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:assetx/utils/yaml.dart';
+import 'package:assetx/utils/io/yaml.dart';
 
 void main() {
   group('YamlUtils Tests', () {

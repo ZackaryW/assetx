@@ -1,6 +1,6 @@
 import 'package:assetx/gen/default.dart';
-
 import '../gen/config.dart';
+import '../gen/gen_static.dart';
 import '../utils/codebuffer.dart';
 import '../utils/lookup.dart';
 
@@ -17,8 +17,19 @@ class TemplateProcessor {
     final buffer = CodeBuffer();
 
     // Add necessary imports
-    buffer.addImport('// ignore_for_file: non_constant_identifier_names');
+    buffer.addImport(
+      '// ignore_for_file: non_constant_identifier_names, camel_case_types',
+    );
     buffer.addImport('import \'package:assetx/objectx/objectx.dart\';');
+
+    // Generate non-lazy static classes first
+    StaticGenerator.generateNonLazyClasses(
+      buffer,
+      files,
+      config,
+      packageName,
+      usePackagePrefix,
+    );
 
     // Generate instance mapping with conflict resolution
     _generateInstanceMap(buffer, files, config, packageName, usePackagePrefix);
@@ -66,6 +77,7 @@ class TemplateProcessor {
         config,
         packageName,
         usePackagePrefix,
+        files,
       );
       imports.addAll(instantiationResult.imports);
 
@@ -259,6 +271,7 @@ class TemplateProcessor {
     AssetXConfig config,
     String packageName,
     bool usePackagePrefix,
+    List<AssetLookupFile> allFiles,
   ) {
     final imports = <String>{};
     final typeName = _getTypeName(file, config);
@@ -314,11 +327,29 @@ class TemplateProcessor {
         final assetPath = usePackagePrefix
             ? 'packages/$packageName/${file.normalizedPath}'
             : file.normalizedPath;
-  
+
         // check and generate non lazy option
         final lazy = mapConfig.lazy;
+        if (!lazy && ["datax", "envx"].contains(builtin)) {
+          // For non-lazy datax/envx, reference the static class instance instead
+          // Find the class index for this file
+          final nonLazyFiles = StaticGenerator.findNonLazyFiles(
+            allFiles,
+            config,
+          );
+          final fileIndex = nonLazyFiles.indexOf(file);
+          if (fileIndex >= 0) {
+            final className = '\$m${fileIndex.toString().padLeft(4, '0')}';
+            final instanceName = '${className}Instance';
+            return _InstantiationResult(instanceName, imports);
+          }
+        }
+
         if (!lazy) {
-          return _InstantiationResult('$className("$assetPath", lazy: false)', imports);
+          return _InstantiationResult(
+            '$className("$assetPath", lazy: false)',
+            imports,
+          );
         }
 
         return _InstantiationResult('$className("$assetPath")', imports);

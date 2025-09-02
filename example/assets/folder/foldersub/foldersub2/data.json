@@ -1,1 +1,13 @@
-{}
+{
+    "hello" : "x",
+    "anumber" : 111,
+    "nested" :{
+        "key" : "value",
+        "another_key" : "another_value",
+        "evenchild" : {
+            "key" : "value",
+            "another_key" : "another_value",
+            "wow" : "((data2.json))"
+        }
+    }
+}

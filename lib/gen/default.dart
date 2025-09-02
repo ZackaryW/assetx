@@ -10,13 +10,11 @@ final typeRegistry = {
   "image": TypeConfig(
     fileExtensions: [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"],
   ),
-  "data": TypeConfig(fileExtensions: [".json", ".yaml", ".yml"]),
-  "env": TypeConfig(fileExtensions: [".env"]),
+  "data": TypeConfig(fileExtensions: [".json", ".yaml", ".yml", ".toml", ".env"]),
 };
 
 final builtinTypeMapping = {
   "imagex": "ImageX",
   "datax": "DataX",
-  "envx": "EnvX",
   "basex": "BaseX",
 };

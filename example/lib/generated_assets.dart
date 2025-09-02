@@ -1,15 +1,70 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, camel_case_types
 import 'package:assetx/objectx/objectx.dart';
 import 'package:example/custom_handler.dart';
+
+// Generated non-lazy static classes
+
+class $m0000 {
+  String get hello => "x";
+  int get anumber => 111;
+  get nested => $m0000_nestedInstance;
+}
+
+final $m0000Instance = $m0000();
+
+class $m0000_nested {
+  String get key => "value";
+  String get another_key => "another_value";
+  get evenchild => $m0000_nested_evenchildInstance;
+}
+
+final $m0000_nestedInstance = $m0000_nested();
+
+class $m0000_nested_evenchild {
+  String get key => "value";
+  String get another_key => "another_value";
+  get wow => $m0000_nested_evenchild_wowInstance;
+}
+
+final $m0000_nested_evenchildInstance = $m0000_nested_evenchild();
+
+class $m0000_nested_evenchild_wow {
+  int get test => 1;
+}
+
+final $m0000_nested_evenchild_wowInstance = $m0000_nested_evenchild_wow();
+
+
+
+
+class $m0001 {
+  List get x => [1,2];
+  List get hello => [{"w":1}];
+}
+
+final $m0001Instance = $m0001();
+
+class $m0002 {
+  int get test => 1;
+}
+
+final $m0002Instance = $m0002();
+
+class $m0003 {
+  String get hello => "world";
+}
+
+final $m0003Instance = $m0003();
 
 // Instance mapping
 final Map<String, dynamic> instanceMap = {
   "assets.data.kk": CustomAsset("packages/example/assets/data/kk.ww"),
-  "assets.folder.foldersub.foldersub2.data": DataX("packages/example/assets/folder/foldersub/foldersub2/data.json", lazy: false),
-  "assets.folder.foldersub.foldersub2.data1": DataX("packages/example/assets/folder/foldersub/foldersub2/data1.json", lazy: false),
-  "assets.folder.foldersub.foldersub2.data2": DataX("packages/example/assets/folder/foldersub/foldersub2/data2.json", lazy: false),
+  "assets.folder.foldersub.foldersub2.data": $m0000Instance,
+  "assets.folder.foldersub.foldersub2.data1": $m0001Instance,
+  "assets.folder.foldersub.foldersub2.data2": $m0002Instance,
   "assets.image.image": ImageX("packages/example/assets/image/image.gif"),
-  "coolassets.data1.datachild.data": DataX("packages/example/coolassets/data1/datachild/data.json", lazy: false),
+  "assets.image.x": ImageX("packages/example/assets/image/x.jpg"),
+  "coolassets.data1.datachild.data": $m0003Instance,
   "coolassets.image1.image2.img_jpeg": ImageX("packages/example/coolassets/image1/image2/img.jpeg"),
   "coolassets.image1.image2.img_jpg": ImageX("packages/example/coolassets/image1/image2/img.jpg"),
   "coolassets.image1.image2.img_png": ImageX("packages/example/coolassets/image1/image2/img.png")
@@ -45,6 +100,7 @@ final $c0003Instance = $c0003();
 class $c0004 extends FolderX {
   const $c0004() : super('image');
   get image => instanceMap["assets.image.image"];
+  get x => instanceMap["assets.image.x"];
 }
 final $c0004Instance = $c0004();
 

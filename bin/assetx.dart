@@ -6,7 +6,7 @@ import 'package:assetx/gen/gen.dart';
 import 'package:assetx/utils/lookup.dart';
 import 'package:assetx/utils/pubspec_update.dart';
 import 'package:assetx/utils/pubspec_resolve.dart';
-import 'package:assetx/utils/yaml.dart';
+import 'package:assetx/utils/io/yaml.dart';
 
 void main() async {
   try {

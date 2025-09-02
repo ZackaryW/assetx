@@ -141,8 +141,13 @@ class MapConfig {
 
   const MapConfig({this.builtin, this.src, this.passIn, this.lazy = true});
 
-  factory MapConfig.fromJson(Map<String, dynamic> json) =>
-      _$MapConfigFromJson(json);
+  factory MapConfig.fromJson(Map<String, dynamic> json) {
+    final instance = _$MapConfigFromJson(json);
+    if (instance.builtin == null && !instance.lazy) {
+      throw Exception('Invalid MapConfig: lazy can only be false when builtin is not null');
+    }
+    return instance;
+  }
 
   Map<String, dynamic> toJson() => _$MapConfigToJson(this);
 }
