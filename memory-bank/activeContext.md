@@ -1,41 +1,34 @@
 # Active Context
 
-## Current State
-AssetX is **PRODUCTION READY** with full nested asset access and local testing support.
+## Current Status
+Static class generation is implemented and working. All features complete.
 
-## Core Features Working
-- ✅ Configuration system with type and map registries
-- ✅ Asset discovery with filtering
-- ✅ Nested folder access: `AssetMap.assets.folder.subfolder.file`
-- ✅ Package-aware paths for production builds
-- ✅ Local testing mode without package prefixes
-- ✅ Conflict resolution for duplicate filenames
-- ✅ CLI interface with dual generation
+## Recent Work
+- Added `gen_static.dart` with StaticGenerator class
+- Implemented multi-format parsing (JSON/YAML/ENV/TOML)
+- Fixed instance vs class type issue in instanceMap
+- Updated test file with Flutter integration examples
+- Corrected documentation tone
 
-## Recent Addition
-- **Local Testing Support**: Added `local_destination` config option
-- **Dual Generation**: CLI generates both production and local versions
-- **Path Toggling**: Package prefixes can be enabled/disabled per build
+## Next Steps
+- None. All requested features are complete and tested.
 
-## Output Formats
-**Production Version** (with package prefixes):
+## Key Working Features
 ```dart
-final Map<String, dynamic> instanceMap = {
-  "assets.data.file": DataX("packages/myapp/assets/data/file.json"),
+// Static classes from parsed data
+class $m0000 {
+  String get hello => "x";
+  get nested => $m0000_nestedInstance;
+}
+final $m0000Instance = $m0000();
+
+// Instance mapping
+final instanceMap = {
+  "assets.folder.data": $m0000Instance, // uses instance
 };
 ```
 
-**Local Version** (without package prefixes):
-```dart
-final Map<String, dynamic> instanceMap = {
-  "assets.data.file": DataX("assets/data/file.json"),
-};
-```
-
-## Access Pattern
-```dart
-// Both versions support the same nested access
-AssetMap.assets.folder.subfolder.file.asset
-```
-
-**Status: Production ready with local testing support**
+## Access Patterns Available
+- Direct: `$m0000Instance.hello`
+- AssetMap: `AssetMap.assets.folder.data.hello`
+- Flutter: `Image.asset(AssetMap.assets.image.x.path)`

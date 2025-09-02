@@ -1,65 +1,53 @@
 # System Patterns
 
-## Architecture Overview
-Config → Discovery → Generation → Output (Dual Mode)
+## Architecture Flow
+Config → Discovery → Static Generation → Template Generation → Output
 
-## Core Components
-1. **Config**: Registry-based configuration with type/map mappings
-2. **Discovery**: Asset scanning with filtering rules
-3. **Generation**: CodeBuffer-based code generation with path toggling
-4. **Output**: Dual generation for production and local testing
+## Static Class Generation Pattern
+When `lazy: false` is set for datax/envx types:
+1. File detection via StaticGenerator.findNonLazyFiles()
+2. Multi-format parsing with IoExt.loadAuto()
+3. Class generation with direct property getters
+4. Instance creation for AssetMap integration
+5. Nested structure handling for deep objects
 
-## Key Patterns
-
-### Configuration System
-- Type registry: Maps extensions to asset types
-- Map registry: Maps types to implementation classes  
-- Custom types: Support for complex instantiation patterns
-
-### Code Generation
-- **CodeBuffer**: Clean separation of imports and code
-- **Path Toggling**: Package prefixes optional for local testing
-- **Nested Access**: Subfolder getters enable deep navigation
-
-### Dual Generation Pattern
+## Generated Class Structure
 ```dart
-// Production (usePackagePrefix: true)
-"packages/myapp/assets/file.json"
+// From JSON: {"hello": "world", "nested": {"key": "value"}}
+class $m0000 {
+  String get hello => "world";
+  get nested => $m0000_nestedInstance;
+}
+final $m0000Instance = $m0000();
 
-// Local (usePackagePrefix: false)  
-"assets/file.json"
+class $m0000_nested {
+  String get key => "value";
+}
+final $m0000_nestedInstance = $m0000_nested();
 ```
 
-## Generated Structure
+## Instance Integration Pattern
 ```dart
-// Instance mapping
-final Map<String, dynamic> instanceMap = { ... };
-
-// Nested folder classes with subfolder getters
-class $c0001 extends FolderX {
-  get subfolder => $c0002Instance;  // Enables nested access
-}
-
-// Root access via AssetMap
-class AssetMap {
-  static get assets => $c0001Instance;
-}
+final Map<String, dynamic> instanceMap = {
+  "assets.config.app": $m0000Instance,  // Static instance
+  "assets.images.logo": ImageX("assets/images/logo.png"), // Asset instance
+};
 ```
 
-## Configuration Example
-```yaml
-destination: lib/generated_assets.dart
-local_destination: lib/generated_assets_local.dart  # Optional
+## File Organization
+- **gen_static.dart**: StaticGenerator for non-lazy class generation
+- **gen.dart**: TemplateProcessor for structure and instance mapping
+- **ioext.dart**: Multi-format file loader (JSON/YAML/ENV/TOML)
+- **toml.dart**: Custom TOML parser
 
-type_registry:
-  data: { file_extensions: [json, yaml] }
-  
-map_registry:
-  custom: { src: "lib/models.dart::Custom", passIn: "path" }
+## Access Patterns
+```dart
+// Direct instance access
+String title = $m0000Instance.hello;
+
+// AssetMap nested access
+String title = AssetMap.assets.config.app.hello;
+
+// Deep nested access
+int value = AssetMap.assets.config.app.nested.key;
 ```
-
-## Design Principles
-- **Simple**: Clean pipeline without unnecessary complexity
-- **Flexible**: Configurable types and generation modes
-- **Testable**: Local generation for development/testing
-- **Nested**: Intuitive dot notation access

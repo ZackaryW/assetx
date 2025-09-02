@@ -2,53 +2,62 @@
 
 ## Technology Stack
 - **Language**: Dart
-- **Dependencies**: `path`, `yaml`, `json_annotation`
-- **Build**: `build_runner` for code generation
+- **Dependencies**: `path`, `yaml`, `json_annotation`, `build_runner`
 - **Testing**: Flutter Web validation
-
-## Configuration System
-- **Type Registry**: Maps file extensions to asset types
-- **Map Registry**: Maps types to implementation classes
-- **Custom Types**: Support for complex instantiation patterns
-- **Local Testing**: Optional non-prefixed paths for development
-
-## Asset Types
-- **DataX**: JSON/YAML data files
-- **ImageX**: All image formats (png, jpg, gif, webp, bmp, svg)
-- **EnvX**: Environment files
-- **BaseX**: Default fallback
-- **Custom**: User-defined types via configuration
+- **Parsing**: Custom IoExt system for multi-format support
 
 ## File Structure
 ```
 lib/
-├── gen/           # Code generation system
-│   ├── config.dart     # Configuration models  
-│   ├── gen.dart        # Main generation logic
-│   └── default.dart    # Default mappings
-├── objectx/       # Asset type classes
-├── utils/         # Discovery and utilities
-│   ├── lookup.dart     # Asset discovery
-│   ├── codebuffer.dart # Code generation utility
-│   └── pubspec_resolve.dart # Package resolution
+├── gen/
+│   ├── config.dart        # Configuration models  
+│   ├── gen.dart           # Template processing
+│   ├── gen_static.dart    # Static class generation
+│   └── default.dart       # Default mappings
+├── objectx/               # Asset type classes
+├── utils/                 # Discovery and utilities
+│   ├── lookup.dart
+│   ├── codebuffer.dart
+│   ├── pubspec_resolve.dart
+│   └── io/
+│       ├── ioext.dart     # Multi-format loader
+│       └── toml.dart      # TOML parser
 bin/
-└── assetx.dart    # CLI interface
+└── assetx.dart           # CLI interface
 ```
 
-## Generation Modes
-**Production**: Package-prefixed paths (`packages/myapp/...`)
-**Local**: Direct paths (`assets/...`) for testing
+## Asset Types
+- **DataX (lazy: false)**: JSON/YAML/ENV/TOML → Static classes
+- **DataX (lazy: true)**: Traditional async loading
+- **ImageX**: Image formats with Flutter integration
+- **EnvX (lazy: false)**: Environment files → Static properties
 
-## Generated Output
-- **Instance mapping**: Asset path to object mapping
-- **Nested access**: Folder classes with subfolder getters
-- **Root access**: AssetMap class with static getters
-- **Conflict resolution**: Extension suffixes for duplicates
+## Multi-Format Parsing
+- **JSON**: Native `dart:convert` 
+- **YAML**: `yaml` package
+- **ENV**: Custom key=value parser
+- **TOML**: Custom TomlLoader
+
+## Generation Pattern
+```dart
+// From data file to static class
+class $m0000 {
+  String get hello => "world";
+  get nested => $m0000_nestedInstance;
+}
+final $m0000Instance = $m0000();
+```
+
+## Integration Architecture
+Instance map uses generated instances:
+```dart
+final instanceMap = {
+  "assets.config.app": $m0000Instance, // const instance
+};
+```
 
 ## CLI Features
-- Package name resolution from pubspec.yaml
-- Dual file generation (production + local)
-- Automatic pubspec.yaml updates
-- Asset discovery with filtering
-
-**Status: Production ready**
+- Multi-format file detection and processing
+- Static class generation based on lazy configuration
+- Error handling for unparseable files
+- Dual output (production/local paths)

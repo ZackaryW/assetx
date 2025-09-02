@@ -1,41 +1,34 @@
 # AssetX Project Brief
 
-## Overview
-AssetX is a simple tool to create asset mapping and generate a target Dart file. This is a simple tool, not some complex and sophisticated design.
+## Purpose
+Code generation tool that creates type-safe asset mappings for Flutter projects.
 
-## Core Purpose
-- Scan assets using command tool
-- Generate Dart code with asset instances and folder structure
-- Create mapping with customization
+## Core Functions
+- Scan asset folders and generate Dart access code
+- Create nested folder access: `AssetMap.assets.folder.file`
+- Parse data files (JSON/YAML/ENV/TOML) into static classes when `lazy: false`
+- Generate both production and local versions
 
-## Target Output
-Generate Dart code like this:
-
+## Current Output
 ```dart
-// Generated Asset Instances
-final DataX $_00000 = DataX('assets/data/config.json');
-final DataX $_00001 = DataX('assets/data/data/config.json');
-final ImageX $_00002 = ImageX('assets/images/logo.png');
-final BaseX $_00003 = BaseX('assets/images/some_folder/x.mp4');
-final ImageX $_00004 = ImageX('assets/images/test.jpg');
-final Profile $_00005 = Profile('assets/profiles/user.json');
-
-// Generated Folder Structure
-class $c0000 extends FolderX {
-  const $c0000() : super('data');
-  static get config => $_00000;
-  static get data => $c0003Instance;
+// Static classes from parsed data files
+class $m0000 {
+  String get title => "My App";
+  get nested => $m0000_nestedInstance;
 }
-final $c0000Instance = $c0000();
+final $m0000Instance = $m0000();
 
-class $c0001 extends FolderX {
-  const $c0001() : super('images');
-  static get logo => $_00002;
-  static get test => $_00004;
-  static get some_folder => $c0004Instance;
+// Asset mapping
+final Map<String, dynamic> instanceMap = {
+  "assets.config.app": $m0000Instance,
+  "assets.images.logo": ImageX("assets/images/logo.png"),
+};
+
+// Nested access
+class AssetMap {
+  static get assets => $c0000Instance;
 }
-final $c0001Instance = $c0001();
 ```
 
-## Key Requirement
-Keep it simple and minimal - only implement what's needed for the asset mapping generation.
+## Key Principle
+Simple asset mapping with optional data parsing capabilities.

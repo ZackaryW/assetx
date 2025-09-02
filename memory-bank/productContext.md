@@ -1,32 +1,31 @@
 # Product Context
 
-## Purpose
-AssetX generates type-safe Dart code for Flutter asset access, eliminating hardcoded paths and enabling nested folder navigation.
+## Problems Solved
+- Eliminates hardcoded asset paths that break silently
+- Removes runtime JSON/YAML parsing for configuration files
+- Provides type-safe access to both assets and parsed data
 
-## Core Value
-- **Type Safety**: No more string typos in asset paths
-- **Nested Access**: Intuitive dot notation for deep folder structures  
-- **Dual Mode**: Production builds with package paths, local testing without
-- **Auto-Discovery**: Scans and maps all assets automatically
+## User Workflow
+1. Configure `assetx.yaml` with asset folders and data parsing rules
+2. Run `dart run assetx` to generate mappings
+3. Access assets: `AssetMap.assets.images.profile.path`
+4. Access parsed data: `AssetMap.assets.config.app.title`
+5. Use in Flutter: `Image.asset(AssetMap.assets.image.x.path)`
 
-## User Experience
-1. Configure asset folders in `assetx.yaml`
-2. Run `dart run assetx`
-3. Use generated code: `AssetMap.assets.images.profile.avatar.asset`
-
-## Output
-Transforms folder structure into clean, type-safe access patterns:
-
+## Before vs After
+**Before**: 
 ```dart
-// Instead of error-prone strings
-Image.asset('assets/images/profile/avatar.png')
+final config = jsonDecode(await rootBundle.loadString('assets/config.json'));
+final title = config['app']['title']; // nullable, runtime parsing
+```
 
-// Use generated, autocomplete-friendly code  
-AssetMap.assets.images.profile.avatar.asset
+**After**: 
+```dart
+final title = AssetMap.assets.config.app.title; // direct property access
 ```
 
 ## Key Benefits
-- **No Typos**: Generated code prevents path errors
-- **IDE Support**: Full autocomplete and navigation
-- **Maintenance**: Assets automatically stay in sync
-- **Testing**: Local mode for development without package complexity
+- Type safety for asset paths
+- IDE autocomplete for all assets and data properties
+- No runtime JSON parsing overhead
+- Multi-format support (JSON/YAML/ENV/TOML)

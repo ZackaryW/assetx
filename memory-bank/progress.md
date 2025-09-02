@@ -1,40 +1,43 @@
 # Progress
 
-## Status: PRODUCTION READY ✅
+## Completion Status
+All core features are complete and tested.
 
-## Core Features Complete
-- ✅ Asset discovery and filtering
-- ✅ Configuration system with type/map registries
-- ✅ Nested folder access system
-- ✅ Package-aware path generation
-- ✅ Local testing support
-- ✅ Conflict resolution
-- ✅ CLI interface
+## Static Class Generation ✅
+- Compile-time parsing of JSON/YAML/ENV/TOML files
+- Generated classes: `$m0000`, `$m0001` with direct property access
+- Instance architecture: Classes create const instances for AssetMap integration
+- Nested object support: Deep hierarchies become class hierarchies
+- Flutter integration: Image display and data access working
 
-## Recent Milestone: Local Testing Support
-- **Dual Generation**: Produces both production and local versions
-- **Path Toggling**: Package prefixes optional for local testing
-- **Configuration**: Added `local_destination` option
+## Implementation Files
+- `gen_static.dart`: StaticGenerator class for non-lazy asset processing
+- `gen.dart`: TemplateProcessor integration
+- `ioext.dart`: Multi-format file loader
+- `toml.dart`: TOML parser
 
-## Architecture
-- **Discovery**: Scan assets with filtering rules
-- **Generation**: CodeBuffer-based clean code generation  
-- **Output**: Instance mapping with nested folder access
-- **CLI**: Package resolution and dual file generation
-
-## Generated Output
+## Generated Code Structure
 ```dart
-// Nested access pattern
-AssetMap.assets.folder.subfolder.file.asset
+class $m0000 {
+  String get hello => "x";
+  get nested => $m0000_nestedInstance;
+}
+final $m0000Instance = $m0000();
 
-// Production paths: packages/myapp/assets/...
-// Local paths: assets/...
+final instanceMap = {
+  "assets.folder.data": $m0000Instance,
+};
 ```
 
-## File Structure
-- `lib/gen/`: Code generation system
-- `lib/utils/`: Discovery and utilities
-- `lib/objectx/`: Asset type classes
-- `bin/assetx.dart`: CLI interface
+## Core Features Status
+- ✅ Asset discovery and filtering
+- ✅ Configuration system
+- ✅ Nested folder access
+- ✅ Package-aware path generation
+- ✅ Local testing support
+- ✅ CLI interface
+- ✅ Static class generation
+- ✅ Multi-format support
+- ✅ Flutter integration
 
-**Completion: 100% - Production ready with local testing**
+Project is complete and ready for use.
