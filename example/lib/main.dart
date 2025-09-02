@@ -198,7 +198,9 @@ class _AssetTestPageState extends State<AssetTestPage> {
 
     _addResult('\n✅ Asset configuration test completed!');
     _addResult('\nImage Display Test:');
-    _addResult('   📸 The x.jpg image should be displayed above the test results');
+    _addResult(
+      '   📸 The x.jpg image should be displayed above the test results',
+    );
     _addResult('   📸 Image path: ${AssetMap.assets.image.x.path}');
     _addResult('   📸 Image accessible via: AssetMap.assets.image.x');
     _addResult('\nNew static instance access patterns available:');

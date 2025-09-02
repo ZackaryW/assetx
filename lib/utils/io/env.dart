@@ -1,4 +1,3 @@
-
 class EnvLoader {
   static Map<String, dynamic> loadEnv(String value) {
     final lines = value.split('\n');

@@ -34,12 +34,11 @@ class $m0000_nested_evenchild_wow {
 
 final $m0000_nested_evenchild_wowInstance = $m0000_nested_evenchild_wow();
 
-
-
-
 class $m0001 {
-  List get x => [1,2];
-  List get hello => [{"w":1}];
+  List get x => [1, 2];
+  List get hello => [
+    {"w": 1},
+  ];
 }
 
 final $m0001Instance = $m0001();
@@ -65,9 +64,15 @@ final Map<String, dynamic> instanceMap = {
   "assets.image.image": ImageX("packages/example/assets/image/image.gif"),
   "assets.image.x": ImageX("packages/example/assets/image/x.jpg"),
   "coolassets.data1.datachild.data": $m0003Instance,
-  "coolassets.image1.image2.img_jpeg": ImageX("packages/example/coolassets/image1/image2/img.jpeg"),
-  "coolassets.image1.image2.img_jpg": ImageX("packages/example/coolassets/image1/image2/img.jpg"),
-  "coolassets.image1.image2.img_png": ImageX("packages/example/coolassets/image1/image2/img.png")
+  "coolassets.image1.image2.img_jpeg": ImageX(
+    "packages/example/coolassets/image1/image2/img.jpeg",
+  ),
+  "coolassets.image1.image2.img_jpg": ImageX(
+    "packages/example/coolassets/image1/image2/img.jpg",
+  ),
+  "coolassets.image1.image2.img_png": ImageX(
+    "packages/example/coolassets/image1/image2/img.png",
+  ),
 };
 
 // Generated Folder Structure
@@ -75,18 +80,21 @@ class $c0000 extends FolderX {
   const $c0000() : super('data');
   get kk => instanceMap["assets.data.kk"];
 }
+
 final $c0000Instance = $c0000();
 
 class $c0001 extends FolderX {
   const $c0001() : super('folder');
   get foldersub => $c0002Instance;
 }
+
 final $c0001Instance = $c0001();
 
 class $c0002 extends FolderX {
   const $c0002() : super('foldersub');
   get foldersub2 => $c0003Instance;
 }
+
 final $c0002Instance = $c0002();
 
 class $c0003 extends FolderX {
@@ -95,6 +103,7 @@ class $c0003 extends FolderX {
   get data1 => instanceMap["assets.folder.foldersub.foldersub2.data1"];
   get data2 => instanceMap["assets.folder.foldersub.foldersub2.data2"];
 }
+
 final $c0003Instance = $c0003();
 
 class $c0004 extends FolderX {
@@ -102,35 +111,41 @@ class $c0004 extends FolderX {
   get image => instanceMap["assets.image.image"];
   get x => instanceMap["assets.image.x"];
 }
+
 final $c0004Instance = $c0004();
 
 class $c0005 extends FolderX {
   const $c0005() : super('data1');
   get datachild => $c0006Instance;
 }
+
 final $c0005Instance = $c0005();
 
 class $c0006 extends FolderX {
   const $c0006() : super('datachild');
   get data => instanceMap["coolassets.data1.datachild.data"];
 }
+
 final $c0006Instance = $c0006();
 
 class $c0007 extends FolderX {
   const $c0007() : super('folder1');
   get folderexclude => $c0008Instance;
 }
+
 final $c0007Instance = $c0007();
 
 class $c0008 extends FolderX {
   const $c0008() : super('folderexclude');
 }
+
 final $c0008Instance = $c0008();
 
 class $c0009 extends FolderX {
   const $c0009() : super('image1');
   get image2 => $c0010Instance;
 }
+
 final $c0009Instance = $c0009();
 
 class $c0010 extends FolderX {
@@ -139,6 +154,7 @@ class $c0010 extends FolderX {
   get img_jpg => instanceMap["coolassets.image1.image2.img_jpg"];
   get img_png => instanceMap["coolassets.image1.image2.img_png"];
 }
+
 final $c0010Instance = $c0010();
 
 class $c0011 extends FolderX {
@@ -147,6 +163,7 @@ class $c0011 extends FolderX {
   get folder => $c0001Instance;
   get image => $c0004Instance;
 }
+
 final $c0011Instance = $c0011();
 
 class $c0012 extends FolderX {
@@ -155,6 +172,7 @@ class $c0012 extends FolderX {
   get folder1 => $c0007Instance;
   get image1 => $c0009Instance;
 }
+
 final $c0012Instance = $c0012();
 
 // AssetMap class for easy access to all root folders
@@ -164,4 +182,3 @@ class AssetMap {
   static get assets => $c0011Instance;
   static get coolassets => $c0012Instance;
 }
-

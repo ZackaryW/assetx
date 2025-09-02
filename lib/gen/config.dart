@@ -144,7 +144,9 @@ class MapConfig {
   factory MapConfig.fromJson(Map<String, dynamic> json) {
     final instance = _$MapConfigFromJson(json);
     if (instance.builtin == null && !instance.lazy) {
-      throw Exception('Invalid MapConfig: lazy can only be false when builtin is not null');
+      throw Exception(
+        'Invalid MapConfig: lazy can only be false when builtin is not null',
+      );
     }
     return instance;
   }

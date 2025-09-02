@@ -6,8 +6,6 @@ import 'package:assetx/utils/io/yaml.dart';
 import 'package:assetx/utils/io/toml.dart';
 import 'package:path/path.dart' as p;
 
-
-
 class IoExt {
   static Map<String, dynamic> loadAuto(String path, String content) {
     final extension = path.split('.').last;
