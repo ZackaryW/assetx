@@ -50,5 +50,6 @@ map_registry:
     builtin: imagex
   data:
     builtin: datax
+    lazy: false
   custom:
     src: "lib/custom_handler.dart::CustomAsset"

@@ -83,10 +83,12 @@ MapConfig _$MapConfigFromJson(Map<String, dynamic> json) => MapConfig(
   builtin: json['builtin'] as String?,
   src: json['src'] as String?,
   passIn: json['passIn'] as String?,
+  lazy: json['lazy'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$MapConfigToJson(MapConfig instance) => <String, dynamic>{
   'builtin': instance.builtin,
   'src': instance.src,
   'passIn': instance.passIn,
+  'lazy': instance.lazy,
 };

@@ -137,7 +137,9 @@ class MapConfig {
   @JsonKey(name: 'passIn')
   final String? passIn;
 
-  const MapConfig({this.builtin, this.src, this.passIn});
+  final bool lazy;
+
+  const MapConfig({this.builtin, this.src, this.passIn, this.lazy = true});
 
   factory MapConfig.fromJson(Map<String, dynamic> json) =>
       _$MapConfigFromJson(json);

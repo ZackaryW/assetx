@@ -2,7 +2,7 @@ import 'package:assetx/objectx/basex.dart';
 import 'package:flutter/widgets.dart';
 
 class ImageX extends BaseX {
-  ImageX(super.path) {
+  ImageX(super.path, {super.lazy = true}) {
     // if not jpg, jpeg, png, webp, gif, bmp
     if (!path.endsWith('.jpg') &&
         !path.endsWith('.jpeg') &&
@@ -13,6 +13,10 @@ class ImageX extends BaseX {
       throw Exception(
         'ImageX only supports jpg, jpeg, png, webp, gif, and bmp files.',
       );
+    }
+
+    if (!lazy) {
+      asset;
     }
   }
 

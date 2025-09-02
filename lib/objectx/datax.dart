@@ -3,10 +3,13 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 
 class DataX extends BaseX {
-  DataX(super.path) {
+  DataX(super.path, {super.lazy = true}) {
     // if not json
     if (!path.endsWith('.json')) {
       throw Exception('DataX only supports json files.');
+    }
+    if (!lazy) {
+      asset;
     }
   }
 

@@ -314,6 +314,13 @@ class TemplateProcessor {
         final assetPath = usePackagePrefix
             ? 'packages/$packageName/${file.normalizedPath}'
             : file.normalizedPath;
+  
+        // check and generate non lazy option
+        final lazy = mapConfig.lazy;
+        if (!lazy) {
+          return _InstantiationResult('$className("$assetPath", lazy: false)', imports);
+        }
+
         return _InstantiationResult('$className("$assetPath")', imports);
       }
     }

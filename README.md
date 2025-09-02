@@ -69,10 +69,10 @@ type_registry:
   custom:
     pattern: ["*/config.json"]
 map_registry:
+  data:
+    builtin: datax
+    lazy: false
   custom:
     src: "lib/models.dart::Config"
 ```
 
-## Summary
-
-AssetX creates a unified asset tree with automatic pubspec management. One configuration, one import, access all your assets through a clean nested structure.
