@@ -1,6 +1,6 @@
 name: assetx
 description: "Type-safe asset mapping for Flutter. Generates nested Dart code for easy asset access."
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/ZackaryW/assetx
 
 executables: 

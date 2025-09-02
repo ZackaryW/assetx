@@ -300,7 +300,7 @@ final Map<String, dynamic> instanceMap = {
 **Get started:**
 
 ```bash
-dart pub add --dev assetx
+dart pub add assetx
 # Create assetx.yaml with your configuration
 dart run assetx
 # Use AssetMap.assets.your.nested.structure
