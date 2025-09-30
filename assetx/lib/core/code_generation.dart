@@ -3,6 +3,7 @@ import 'package:path/path.dart' as path;
 import '../model/lock.dart';
 import '../generators/builtin.dart';
 import '../generators/base.dart';
+import '../utils/file/config.dart';
 
 /// Service responsible for generating Dart code from discovered assets
 class CodeGenerationService {
@@ -39,12 +40,19 @@ class CodeGenerationService {
     buffer.writeln('import \'package:assetxf/assetxf.dart\';');
     buffer.writeln();
 
-    // Group files by their actual folder paths
+    // Group files by their actual folder paths (use hash-based keys to avoid name collisions)
     final folderGroups = <String, List<FileConfig>>{};
+    final folderKeyToPath = <String, String>{};
+    
     for (final fileConfig in lock.files) {
       final folderPath = path.dirname(fileConfig.fullPath);
-      final folderName = path.basename(folderPath);
-      folderGroups.putIfAbsent(folderName, () => []).add(fileConfig);
+      final relativeFolderPath = path.relative(folderPath, from: workDir);
+      
+      // Generate unique key for folder grouping
+      final folderKey = IdentifierUtils.createFolderKey(relativeFolderPath);
+      folderKeyToPath[folderKey] = relativeFolderPath;
+      
+      folderGroups.putIfAbsent(folderKey, () => []).add(fileConfig);
     }
 
     // Generate constants for all assets first - delegate to generators
@@ -61,12 +69,11 @@ class CodeGenerationService {
 
     // Generate folder-based classes
     for (final entry in folderGroups.entries) {
-      final folderName = entry.key;
+      final folderKey = entry.key;
       final filesInFolder = entry.value;
-      final folderClassName = _createValidIdentifier(
-        folderName,
-        isClassName: true,
-      );
+      // Get original path and generate unique class name
+      final originalPath = folderKeyToPath[folderKey]!;
+      final folderClassName = IdentifierUtils.createUniqueClassName(originalPath);
 
       // Get all accessors from generators once
       final allAccessors = <FileAccessor>[];
@@ -74,11 +81,11 @@ class CodeGenerationService {
       for (final file in filesInFolder) {
         filesByTypeInFolder.putIfAbsent(file.type, () => []).add(file);
       }
-      
+
       for (final typeEntry in filesByTypeInFolder.entries) {
         final type = typeEntry.key;
         final files = typeEntry.value;
-        
+
         final generator = GeneratorRegistry.getGenerator(type);
         if (generator != null) {
           final accessors = generator.generateAccessors(files);
@@ -113,49 +120,53 @@ class CodeGenerationService {
       buffer.writeln('  const $folderClassName();');
       buffer.writeln();
       buffer.writeln(
-        '  ${folderClassName}_filepaths get FILEPATHS => const ${folderClassName}_filepaths();',
+        '  ${folderClassName}_filepaths get \$paths => const ${folderClassName}_filepaths();',
       );
       buffer.writeln(
-        '  ${folderClassName}_files get FILES => const ${folderClassName}_files();',
+        '  ${folderClassName}_files get \$files => const ${folderClassName}_files();',
       );
       buffer.writeln('}');
       buffer.writeln();
     }
 
     // Generate package-named class that contains all folder instances
-    final folderNames = folderGroups.keys.toList();
-    if (folderNames.isNotEmpty) {
-      final packageClassName = _createValidIdentifier(
-        packageName,
-        isClassName: true,
-      );
+    if (folderKeyToPath.isNotEmpty) {
+      final packageClassName = IdentifierUtils.createValidClassName(packageName);
 
       buffer.writeln('class $packageClassName {');
       buffer.writeln('  const $packageClassName();');
       buffer.writeln();
 
-      // Generate getters for each folder using actual folder names
-      final processedFolders = <String>{};
-      for (final folderName in folderNames) {
-        final folderClassName = _createValidIdentifier(
-          folderName,
-          isClassName: true,
-        );
-        final getterName = _createValidIdentifier(folderName);
+      // Generate getters using readable folder names but pointing to hash-based classes
+      final processedFolderNames = <String>{};
+      for (final entry in folderKeyToPath.entries) {
+        final folderPath = entry.value;
+        final folderName = path.basename(folderPath);
+        
+        // Use readable folder name for getter
+        final getterName = IdentifierUtils.createValidIdentifier(folderName);
+        // Use hash-based class name for type
+        final folderClassName = IdentifierUtils.createUniqueClassName(folderPath);
 
-        if (!processedFolders.contains(folderName)) {
-          buffer.writeln(
-            '  $folderClassName get $getterName => const $folderClassName();',
-          );
-          processedFolders.add(folderName);
+        // Handle duplicate folder names by numbering them
+        var finalGetterName = getterName;
+        var counter = 1;
+        while (processedFolderNames.contains(finalGetterName)) {
+          finalGetterName = '${getterName}$counter';
+          counter++;
         }
+
+        buffer.writeln(
+          '  $folderClassName get $finalGetterName => const $folderClassName();',
+        );
+        processedFolderNames.add(finalGetterName);
       }
       buffer.writeln('}');
       buffer.writeln();
 
       // Generate extension on AssetX with package-named class instance
       buffer.writeln('extension AssetXGenerated on AssetX {');
-      final packageGetterName = _createValidIdentifier(packageName);
+      final packageGetterName = IdentifierUtils.createValidIdentifier(packageName);
       buffer.writeln(
         '  $packageClassName get $packageGetterName => const $packageClassName();',
       );
@@ -164,8 +175,6 @@ class CodeGenerationService {
 
     return buffer.toString();
   }
-
-
 
   /// Get package name from pubspec.yaml
   static Future<String> _getPackageName(String workingDirectory) async {
@@ -194,44 +203,5 @@ class CodeGenerationService {
     return 'assets'; // Default fallback
   }
 
-  /// Create a valid Dart identifier from a string
-  static String _createValidIdentifier(
-    String input, {
-    bool isClassName = false,
-  }) {
-    // Remove special characters and replace with underscores
-    String result = input.replaceAll(RegExp(r'[^a-zA-Z0-9_]'), '_');
 
-    // Ensure it doesn't start with a number
-    if (RegExp(r'^[0-9]').hasMatch(result)) {
-      result = '_$result';
-    }
-
-    // Convert to appropriate case
-    if (isClassName) {
-      // PascalCase for class names
-      return result
-          .split('_')
-          .map(
-            (part) => part.isEmpty
-                ? ''
-                : '${part[0].toUpperCase()}${part.substring(1).toLowerCase()}',
-          )
-          .join();
-    } else {
-      // camelCase for other identifiers
-      final parts = result.split('_');
-      if (parts.isEmpty) return 'assets';
-
-      return parts.first.toLowerCase() +
-          parts
-              .skip(1)
-              .map(
-                (part) => part.isEmpty
-                    ? ''
-                    : '${part[0].toUpperCase()}${part.substring(1).toLowerCase()}',
-              )
-              .join();
-    }
-  }
 }

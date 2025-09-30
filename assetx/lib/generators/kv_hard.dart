@@ -4,6 +4,7 @@ import 'package:path/path.dart' as path;
 import 'base.dart';
 import '../model/lock.dart';
 import '../utils/file/config.dart';
+import '../utils/file/package_path.dart';
 
 /// Generator for hardcode key-value assets (embedded as parsed data)
 class KvHardGenerator extends BaseGenerator {
@@ -27,9 +28,14 @@ class KvHardGenerator extends BaseGenerator {
       dynamic parsedContent;
 
       // Always generate path constant for file path accessors
-      final normalizedPath = fileConfig.fullPath.replaceAll('\\', '/');
+      final relativePath = path.relative(
+        fileConfig.fullPath,
+        from: Directory.current.path,
+      );
+      final normalizedPath = relativePath.replaceAll('\\', '/');
+      final packagePath = PackagePathUtils.getPackageAssetPath(normalizedPath);
       final pathConstName = '\$${fileConfig.uid}_epkg_path';
-      buffer.writeln('const String $pathConstName = \'$normalizedPath\';');
+      buffer.writeln('const String $pathConstName = \'$packagePath\';');
 
       if (extension == '.json') {
         parsedContent = jsonDecode(content);

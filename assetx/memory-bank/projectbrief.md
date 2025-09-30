@@ -32,19 +32,19 @@ AssetX is a Flutter/Dart code generation tool inspired by Flutter Slang, but foc
 **Hardcode Mode** (embedded bytes):
 ```dart
 // Embeds file content as base64
-Image.memory(Assets.folder123.FILES.logo_png.buffer.asUint8List())
+Image.memory(Assets.folder123.$files.logo_png.buffer.asUint8List())
 ```
 
 **Regular Mode** (asset paths):
 ```dart
 // Uses Flutter's standard asset loading
-Image.asset(Assets.folder123.FILEPATHS.logo_png_path)
+Image.asset(Assets.folder123.$paths.logo_png_path)
 ```
 
 Both modes provide:
 - UID-based naming to avoid conflicts
 - Type-safe accessors with IDE support
-- Separate FILEPATHS and FILES classes
+- Separate `$files` and `$paths` classes
 
 ## Not Goals
 - Runtime asset discovery

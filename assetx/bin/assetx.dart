@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:assetx/assetx.dart';
+import 'package:assetx/utils/file/pubspec_update.dart';
 
 void main(List<String> arguments) async {
   try {
@@ -294,6 +295,9 @@ Future<void> _handleGen(List<String> args) async {
 
     print('✅ Generated code written to $partFilePath');
 
+    // Update pubspec.yaml for soft asset types
+    await _updatePubspecForSoftAssets();
+
     // Show generation stats
     final lock = await LockFile.load('assetx.lock');
     final lines = dartCode.split('\n').length;
@@ -306,5 +310,56 @@ Future<void> _handleGen(List<String> args) async {
   } catch (e) {
     print('Error during code generation: $e');
     exit(1);
+  }
+}
+
+/// Updates pubspec.yaml with asset paths for soft asset types
+Future<void> _updatePubspecForSoftAssets() async {
+  try {
+    // Load lock file to get all assets
+    final lock = await LockFile.load('assetx.lock');
+
+    // Find all assets that need to be in pubspec.yaml
+    final softAssetPaths = <String>[];
+    final currentDir = Directory.current.path;
+
+    for (final fileConfig in lock.files) {
+      // Check if this asset type requires pubspec declaration
+      final generator = GeneratorRegistry.getGenerator(fileConfig.type);
+      if (generator?.requiresPubspecAsset == true) {
+        // Convert absolute path to relative path from project root
+        final relativePath = path.relative(
+          fileConfig.fullPath,
+          from: currentDir,
+        );
+
+        // Normalize path separators for cross-platform compatibility
+        final normalizedPath = relativePath.replaceAll('\\', '/');
+
+        if (!softAssetPaths.contains(normalizedPath)) {
+          softAssetPaths.add(normalizedPath);
+        }
+      }
+    }
+
+    if (softAssetPaths.isNotEmpty) {
+      print(
+        '🔄 Updating pubspec.yaml with ${softAssetPaths.length} asset paths...',
+      );
+
+      // Sort paths for consistent output
+      softAssetPaths.sort();
+
+      // Update pubspec.yaml
+      updatePubspecAssets(softAssetPaths);
+
+      print('✅ Updated pubspec.yaml with soft asset paths');
+      for (final assetPath in softAssetPaths) {
+        print('   - $assetPath');
+      }
+    }
+  } catch (e) {
+    print('Warning: Could not update pubspec.yaml: $e');
+    // Don't fail the entire generation for pubspec issues
   }
 }

@@ -4,6 +4,7 @@ import 'package:path/path.dart' as path;
 import 'base.dart';
 import '../model/lock.dart';
 import '../utils/file/config.dart';
+import '../utils/file/package_path.dart';
 
 /// Generator for hardcode image assets (embedded as base64)
 class ImageHardGenerator extends BaseGenerator {
@@ -16,7 +17,7 @@ class ImageHardGenerator extends BaseGenerator {
     '.bmp',
     '.webp',
     '.svg',
-    '.ico',
+    // Note: .ico files are not supported by Flutter's Image.memory()
   ];
 
   const ImageHardGenerator();
@@ -40,13 +41,18 @@ class ImageHardGenerator extends BaseGenerator {
       final base64ConstName = '\$${fileConfig.uid}_base64';
       final bytesConstName = '\$${fileConfig.uid}_bytes';
 
-      // Normalize path for cross-platform compatibility
-      final normalizedPath = fileConfig.fullPath.replaceAll('\\', '/');
+      // Convert to Flutter package asset path format: packages/{packageName}/{relativePath}
+      final relativePath = path.relative(
+        fileConfig.fullPath,
+        from: Directory.current.path,
+      );
+      final normalizedPath = relativePath.replaceAll('\\', '/');
+      final packagePath = PackagePathUtils.getPackageAssetPath(normalizedPath);
 
-      buffer.writeln('const String $pathConstName = \'$normalizedPath\';');
+      buffer.writeln('const String $pathConstName = \'$packagePath\';');
       buffer.writeln('const String $base64ConstName = \'$base64Content\';');
       buffer.writeln(
-        'final ByteData $bytesConstName = ByteData.sublistView(base64Decode($base64ConstName));',
+        'final Uint8List $bytesConstName = base64Decode($base64ConstName);',
       );
       buffer.writeln();
 
@@ -55,7 +61,7 @@ class ImageHardGenerator extends BaseGenerator {
         fileName + extension.replaceAll('.', '_'),
       );
       varReferrers.add(
-        'Image get $dartIdentifier => Image.memory($bytesConstName.buffer.asUint8List());',
+        'Image get $dartIdentifier => Image.memory($bytesConstName);',
       );
     }
 

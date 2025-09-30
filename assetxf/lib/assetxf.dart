@@ -1,3 +1,4 @@
+export 'utils.dart';
 
 class AssetX {
   const AssetX._();

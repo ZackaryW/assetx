@@ -43,7 +43,7 @@ assetx.yaml (config) → Asset Scanner → Code Generator → asset.x.dart (gene
 - **Mode-Based Generation**: 
   - **Hardcode**: Read files and embed as base64-encoded ByteData constants
   - **Regular**: Generate path constants for Flutter's `Image.asset()`
-- **Dual Access Classes**: Generate both FILES and FILEPATHS accessors
+- **Dual Access Classes**: Generate both `$files` and `$paths` accessors
 - **Configuration-Driven**: Mode selection per asset type or globally
 
 ### Asset Type Handling
@@ -55,6 +55,8 @@ assetx.yaml (config) → Asset Scanner → Code Generator → asset.x.dart (gene
   - `kv_hard`: `Map<String, dynamic> get name => data` (JSON) or `String get name => content` ✅
   - `kv_soft`: `Future<Map<String, dynamic>> get name => rootBundle.loadString(path).then((s) => jsonDecode(s) as Map<String, dynamic>)` ✅
 - **Complete Constants**: All types generate both data/content constants AND path constants
+- **Package-Aware Paths**: All generated paths use `packages/{packageName}/` format for cross-package compatibility
+- **Automatic Pubspec Integration**: Soft types automatically declared in pubspec.yaml via `requiresPubspecAsset` property
 - **Extensible**: Generator registry pattern allows custom asset type plugins
 
 ### Utility Organization
@@ -62,6 +64,13 @@ assetx.yaml (config) → Asset Scanner → Code Generator → asset.x.dart (gene
   - Cross-platform path normalization (Windows backslashes → forward slashes)
   - Valid Dart identifier creation (camelCase, special character handling)
   - Numeric prefix handling for valid identifiers
+- **PackagePathUtils**: Package-aware asset path generation (`lib/utils/file/package_path.dart`)
+  - Converts relative paths to `packages/{packageName}/` format
+  - Parses pubspec.yaml for package name extraction
+  - Ensures cross-package asset loading compatibility
+- **PubspecResolver & PubspecUpdate**: Pubspec.yaml integration utilities
+  - Automatic parsing and updating of pubspec.yaml files
+  - Clean integration with Flutter's asset declaration system
 - **FileUtils**: File system operations and ignore file management (`lib/utils/file/update_ignore.dart`)
 - **Shared Utilities**: Reusable helper methods across all generators
 

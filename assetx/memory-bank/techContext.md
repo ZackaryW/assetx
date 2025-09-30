@@ -27,8 +27,11 @@ lib/
 │   └── generator.dart       # Base generator abstract class
 └── utils/
     └── file/
-        ├── config.dart      # IdentifierUtils for Dart naming
-        └── update_ignore.dart # Gitignore management
+        ├── config.dart        # IdentifierUtils for Dart naming
+        ├── package_path.dart  # PackagePathUtils for asset path generation
+        ├── pubspec_resolve.dart # PubspecResolver for parsing pubspec.yaml
+        ├── pubspec_update.dart  # Automatic pubspec.yaml asset updates
+        └── update_ignore.dart   # Gitignore management
 ```
 
 ## Current Implementation Status
@@ -52,6 +55,9 @@ lib/
 - **Enhanced BaseGenerator**: Added FileAccessor class and generateAccessors() method
 - **Type-Safe Code Generation**: All accessors have correct, specific types
 - **Complete Asset Support**: All 4 builtin types generate proper constants and accessors
+- **Automatic Pubspec Integration**: Soft assets automatically added to pubspec.yaml during generation
+- **Package-Aware Asset Paths**: All generated paths use `packages/{packageName}/` format
+- **Cross-Package Compatibility**: Generated code works when used as external dependency
 - **Extension Pattern**: Creating extensions on `AssetX` class from `assetxf.dart` package
 - **Root Folder Classes**: Generating classes that include all root folder instances
 - **Simplified API**: Final extension structure: `extension ... on AssetX { get {classname} }`
@@ -83,11 +89,15 @@ class FileAccessor {
 List<FileAccessor> generateAccessors(List<FileConfig> fileCfgs)
 ```
 
-### Code Quality Enhancements
+### Code Quality & Integration Enhancements
 - **Type Safety**: All generated accessors have correct types (Image, Map, Future, String)
 - **Generator Completeness**: All asset types generate both data/content AND path constants  
 - **Error Resolution**: Fixed missing constants and type assignment errors
 - **Cross-Platform Compatibility**: Proper path normalization in all generators
+- **Package-Aware Paths**: All generated paths use Flutter package format (`packages/{packageName}/path`)
+- **Automatic Pubspec Integration**: Soft assets automatically declared in pubspec.yaml
+- **Clean Utility Architecture**: Dedicated utilities for package paths, pubspec parsing, and updates
+- **Cross-Package Loading**: Generated assets work correctly when package used as dependency
 
 ### 🎯 Future Enhancements
 - Optional build_runner integration (following Flutter Slang pattern)  
@@ -112,12 +122,12 @@ List<FileAccessor> generateAccessors(List<FileConfig> fileCfgs)
 - UID-based constant names to avoid identifier conflicts (e.g., `$3290A103D8520AB0_base64`)
 - Base64 string constants for file content embedding
 - ByteData objects for efficient memory access (`ByteData.sublistView`)
-- Dual accessor classes: FILEPATHS (path strings) and FILES (embedded bytes)
+- Dual accessor classes: `$paths` (path strings) and `$files` (embedded bytes)
 - Directory-based class organization with UID prefixes
 
 ### Asset Processing Handling
 - Read asset files as bytes during generation
 - Convert to base64 strings for embedding in Dart source
-- Generate package-relative paths for FILEPATHS accessors
+- Generate package-relative paths for `$paths` accessors
 - Create UIDs to ensure unique identifiers across all assets
 - Cross-platform path normalization using `path` package

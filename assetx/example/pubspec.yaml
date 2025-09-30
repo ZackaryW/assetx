@@ -1,0 +1,27 @@
+name: example
+description: "demo for assetx"
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  assetxf:
+    path: ../../assetxf
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints:
+  assetx:
+    path: ../
+
+flutter:
+
+  assets:
+    - assets/images_2/file_example_JPG_100kB.jpg
+    - assets/kv_2/ww2.json
