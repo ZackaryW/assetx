@@ -1,0 +1,22 @@
+# AssetX Configuration
+# This file defines which assets should be tracked in the lock file
+
+- path: "example/assets/images_1"
+  type: "image"
+  exclusions: []
+  recursive: false
+
+- path: "example/assets/images_2" 
+  type: "image"
+  exclusions: []
+  recursive: false
+
+- path: "example/assets/kv_1"
+  type: "json"
+  exclusions: ["*.env"]
+  recursive: false
+
+- path: "example/assets/kv_2"
+  type: "json"
+  exclusions: []
+  recursive: false
