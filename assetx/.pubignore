@@ -3,7 +3,7 @@ memory-bank/
 assetx.lock
 
 # Development and testing
-example/
+
 test/
 .dart_tool/
 .packages
@@ -22,4 +22,4 @@ Thumbs.db
 # Git files
 .git/
 .gitignore
-*/file_example_JPG_100kB.jpg
+**/file_example_JPG_100kB.jpg
