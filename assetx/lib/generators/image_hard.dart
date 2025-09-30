@@ -16,7 +16,6 @@ class ImageHardGenerator extends BaseGenerator {
     '.gif',
     '.bmp',
     '.webp',
-    '.svg',
     // Note: .ico files are not supported by Flutter's Image.memory()
   ];
 

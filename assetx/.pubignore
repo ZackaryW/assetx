@@ -1,0 +1,25 @@
+# AssetX development files
+memory-bank/
+assetx.lock
+
+# Development and testing
+example/
+test/
+.dart_tool/
+.packages
+.pub/
+build/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/
+.gitignore
+*/file_example_JPG_100kB.jpg

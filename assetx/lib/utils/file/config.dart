@@ -56,18 +56,18 @@ class IdentifierUtils {
   }
 
   /// Generate a unique hash-based class name for folder paths to prevent naming conflicts
-  /// 
+  ///
   /// Uses the folder basename for readability and appends a hash of the full path
   /// for uniqueness. Example: "Images1_a1b2c3d4" for assets/images_1
   static String createUniqueClassName(String folderPath) {
     final folderName = path.basename(folderPath);
     final baseName = createValidClassName(folderName);
-    
+
     // Generate 8-character hash suffix from full path
     final bytes = utf8.encode(folderPath);
     final digest = sha256.convert(bytes);
     final hashSuffix = digest.toString().substring(0, 8);
-    
+
     return '${baseName}_$hashSuffix';
   }
 

@@ -100,7 +100,9 @@ class _AssetXTestHomePageState extends State<AssetXTestHomePage> {
         '✅ JPG Image.asset widget created (type: ${jpgImage.runtimeType})',
       );
 
-      buffer.writeln('✅ Images2 test completed (ICO files excluded - not supported by Flutter)');
+      buffer.writeln(
+        '✅ Images2 test completed (ICO files excluded - not supported by Flutter)',
+      );
     } catch (e) {
       buffer.writeln('❌ Images2 test failed: $e');
     }
@@ -306,10 +308,7 @@ class _AssetXTestHomePageState extends State<AssetXTestHomePage> {
                         const SizedBox(height: 8),
                         const Text(
                           'Note: ICO files not supported by Flutter',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ],
                     ),

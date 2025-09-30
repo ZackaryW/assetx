@@ -15,7 +15,6 @@ class ImageSoftGenerator extends BaseGenerator {
     '.gif',
     '.bmp',
     '.webp',
-    '.svg',
     // Note: .ico files are not supported by Flutter's Image.asset() either
   ];
 

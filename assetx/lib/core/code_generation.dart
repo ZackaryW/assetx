@@ -43,15 +43,15 @@ class CodeGenerationService {
     // Group files by their actual folder paths (use hash-based keys to avoid name collisions)
     final folderGroups = <String, List<FileConfig>>{};
     final folderKeyToPath = <String, String>{};
-    
+
     for (final fileConfig in lock.files) {
       final folderPath = path.dirname(fileConfig.fullPath);
       final relativeFolderPath = path.relative(folderPath, from: workDir);
-      
+
       // Generate unique key for folder grouping
       final folderKey = IdentifierUtils.createFolderKey(relativeFolderPath);
       folderKeyToPath[folderKey] = relativeFolderPath;
-      
+
       folderGroups.putIfAbsent(folderKey, () => []).add(fileConfig);
     }
 
@@ -73,7 +73,9 @@ class CodeGenerationService {
       final filesInFolder = entry.value;
       // Get original path and generate unique class name
       final originalPath = folderKeyToPath[folderKey]!;
-      final folderClassName = IdentifierUtils.createUniqueClassName(originalPath);
+      final folderClassName = IdentifierUtils.createUniqueClassName(
+        originalPath,
+      );
 
       // Get all accessors from generators once
       final allAccessors = <FileAccessor>[];
@@ -131,7 +133,9 @@ class CodeGenerationService {
 
     // Generate package-named class that contains all folder instances
     if (folderKeyToPath.isNotEmpty) {
-      final packageClassName = IdentifierUtils.createValidClassName(packageName);
+      final packageClassName = IdentifierUtils.createValidClassName(
+        packageName,
+      );
 
       buffer.writeln('class $packageClassName {');
       buffer.writeln('  const $packageClassName();');
@@ -142,11 +146,13 @@ class CodeGenerationService {
       for (final entry in folderKeyToPath.entries) {
         final folderPath = entry.value;
         final folderName = path.basename(folderPath);
-        
+
         // Use readable folder name for getter
         final getterName = IdentifierUtils.createValidIdentifier(folderName);
         // Use hash-based class name for type
-        final folderClassName = IdentifierUtils.createUniqueClassName(folderPath);
+        final folderClassName = IdentifierUtils.createUniqueClassName(
+          folderPath,
+        );
 
         // Handle duplicate folder names by numbering them
         var finalGetterName = getterName;
@@ -166,7 +172,9 @@ class CodeGenerationService {
 
       // Generate extension on AssetX with package-named class instance
       buffer.writeln('extension AssetXGenerated on AssetX {');
-      final packageGetterName = IdentifierUtils.createValidIdentifier(packageName);
+      final packageGetterName = IdentifierUtils.createValidIdentifier(
+        packageName,
+      );
       buffer.writeln(
         '  $packageClassName get $packageGetterName => const $packageClassName();',
       );
@@ -202,6 +210,4 @@ class CodeGenerationService {
 
     return 'assets'; // Default fallback
   }
-
-
 }
