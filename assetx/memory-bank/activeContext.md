@@ -1,6 +1,6 @@
 # Active Context
 
-## Current Status: Production-Ready with Proper Generator Delegation
+## Current Status: Production-Ready with Advanced Collision Resolution
 
 ✅ **Completed Core Features**:
 - Complete CLI interface with all four commands (`add`, `remove`, `sync`, `gen`)
@@ -13,6 +13,9 @@
 - Path normalization for cross-platform compatibility
 - Valid Dart identifier generation utility
 - **Enhanced BaseGenerator**: Supports structured accessor generation
+- **🎉 NEW: Hash-Based Folder Name Collision Resolution**: Prevents conflicts when multiple folders share same name
+- **toInternalPath Utility**: Converts package paths to internal paths for same-package usage
+- **ICO File Support Exclusion**: Properly excludes ICO files from both hard and soft generators due to Flutter limitations
 
 🎉 **Recently Completed Major Improvements**:
 - **Fixed Generator Delegation**: Removed manual `_getFileAccessorForType()` and now properly use generator `varReferrer`
@@ -22,6 +25,9 @@
 - **Automatic Pubspec Integration**: Soft assets automatically added to pubspec.yaml for Flutter loading
 - **Package-Aware Asset Paths**: Generated paths use `packages/{packageName}/` format for cross-package compatibility
 - **Clean Utility Architecture**: Proper separation of concerns with dedicated utility files
+- **🎉 CRITICAL: Hash-Based Folder Name Collision Resolution**: Prevents duplicate class names when folders share same basename
+- **toInternalPath Utility Function**: Strips `packages/{pkg}/` prefix for internal asset loading
+- **ICO File Format Exclusion**: Removed ICO support from generators due to Flutter codec limitations
 
 **Key Achievement**: AssetX now has a complete CLI implementation that works **without build_runner**, following the Flutter Slang approach. All core commands are functional.
 
@@ -48,6 +54,10 @@ Recent improvements addressed critical issues and architectural problems:
 5. **Type Safety**: All accessors now have correct types (Image, Map, Future, etc.)
 6. **Package Asset Paths**: All generated paths use `packages/{packageName}/` format for proper cross-package loading
 7. **Automatic Pubspec Updates**: Soft assets automatically declared in pubspec.yaml during generation
+8. **🎉 CRITICAL: Folder Name Collision Resolution**: Hash-based unique class names prevent conflicts (e.g., `Images1_07114823` vs `Images1_f0a72449`)
+9. **Readable Getter Names with Conflict Numbering**: Human-friendly getters like `images1`, `images11` while maintaining unique class types
+10. **ICO Format Exclusion**: Properly excluded ICO files from both generators due to Flutter's ImageCodecException
+11. **toInternalPath Utility**: Clean path conversion for same-package asset loading without redundant package prefixes
 8. **Flutter Compatibility**: Generated code works correctly when package is used as dependency
 
 ### Fixed Generator Architecture (Major Achievement)

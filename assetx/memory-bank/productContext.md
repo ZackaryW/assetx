@@ -43,11 +43,16 @@ AssetX generates strongly-typed Dart classes using predefined builtin asset type
 - Hierarchical organization matching directory structure
 - Proper documentation comments in generated code
 
-### New Generation Pattern (Current Implementation)
+### Current Generation Pattern (Production Implementation)
 - **Direct File Generation**: Generate `asset.x.dart` straight at target location (no part files)
 - **Extension-Based API**: Create extensions on `AssetX` class from `assetxf.dart` package
 - **Root Folder Classes**: Generate classes containing all root folder instances
 - **Simplified Structure**: Final extension pattern: `extension ... on AssetX { get {classname} }`
+- **🎉 CRITICAL: Hash-Based Collision Resolution**: Prevents conflicts when folders share same name across directories
+  - **Unique Class Names**: `Images1_07114823` vs `Images1_f0a72449` for different `images_1` folders
+  - **Readable Getters**: `images1`, `images11` with automatic conflict numbering for user-friendly API
+- **toInternalPath Utility**: Seamless path conversion for same-package asset usage
+- **Format Compatibility**: ICO files properly excluded due to Flutter ImageCodec limitations
 
 ### Integration Experience
 - Seamless Flutter asset loading integration

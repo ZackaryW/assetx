@@ -20,14 +20,23 @@ bin/
 lib/
 ├── assetx.dart              # Main library export  
 ├── assetx_service.dart      # Core service with complete code generation
+├── core/
+│   ├── asset_discovery.dart   # File system scanning with generator validation
+│   ├── code_generation.dart   # Hash-based collision resolution and class generation
+│   └── lock_file_service.dart # Lock file management with UID collision detection
+├── generators/
+│   ├── base.dart            # BaseGenerator abstract class with FileAccessor support
+│   ├── builtin.dart         # Four builtin generators + registry with ICO exclusion
+│   ├── image_hard.dart      # Base64 embedding generator (excludes ICO)
+│   ├── image_soft.dart      # Asset path generator (excludes ICO)
+│   ├── kv_hard.dart         # JSON/YAML embedding generator
+│   └── kv_soft.dart         # JSON/YAML path generator
 ├── model/
 │   ├── config.dart          # Configuration models with validation
-│   ├── lock.dart            # Lock file models with UID generation
-│   ├── builtin.dart         # Four builtin generators + registry
-│   └── generator.dart       # Base generator abstract class
+│   └── lock.dart            # Lock file models with UID generation
 └── utils/
     └── file/
-        ├── config.dart        # IdentifierUtils for Dart naming
+        ├── config.dart        # IdentifierUtils for Dart naming + hash-based collision resolution
         ├── package_path.dart  # PackagePathUtils for asset path generation
         ├── pubspec_resolve.dart # PubspecResolver for parsing pubspec.yaml
         ├── pubspec_update.dart  # Automatic pubspec.yaml asset updates
@@ -48,6 +57,10 @@ lib/
 - Asset path loading for soft modes
 - Automatic gitignore management
 - Lock file generation and management
+- **🎉 CRITICAL: Hash-Based Folder Name Collision Resolution** with `IdentifierUtils.createUniqueClassName()`
+- **toInternalPath Utility Function** for same-package asset path conversion
+- **ICO File Format Exclusion** from both hard and soft generators due to Flutter limitations
+- **Readable API with Conflict Resolution** using numbered getters for duplicate folder names
 
 ### ✅ Completed Architecture Improvements
 - **Direct Generation**: Simplified `asset.x.dart` generation at target location

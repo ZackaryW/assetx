@@ -23,6 +23,9 @@
 - **🎉 NEW: Automatic Pubspec Integration**: Soft assets automatically added to pubspec.yaml during generation
 - **🎉 NEW: Package-Aware Asset Paths**: All generated paths use `packages/{packageName}/` format for cross-package loading
 - **Utility Architecture**: Clean separation with `PackagePathUtils` for package path generation
+- **🎉 CRITICAL: Hash-Based Folder Name Collision Resolution**: Added SHA256-based unique class names to prevent conflicts
+- **toInternalPath Utility**: Created utility function to convert package paths for same-package usage
+- **ICO File Format Handling**: Properly excluded ICO files from generators due to Flutter codec limitations
 
 ## What's Completed ✅
 - **Generator Delegation Architecture**: CodeGenerationService properly delegates to generators
@@ -32,6 +35,10 @@
 - **Automatic Pubspec Integration**: Soft assets automatically declared in pubspec.yaml during generation
 - **Package-Aware Asset Paths**: All generated paths use Flutter package format for cross-package compatibility
 - **Complete Flutter Ecosystem Integration**: Generated code works seamlessly when package used as dependency
+- **🎉 CRITICAL: Folder Name Collision Resolution**: Hash-based unique class names prevent naming conflicts
+- **Readable API with Conflict Resolution**: Human-friendly getter names with automatic numbering for duplicates
+- **toInternalPath Utility Function**: Clean path conversion utility for same-package asset usage
+- **ICO Format Compatibility**: Proper exclusion of unsupported ICO files from generation pipeline
 
 ## What's Missing ❌
 - **Build System Integration**: Optional build_runner support for future enhancement

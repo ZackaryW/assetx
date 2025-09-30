@@ -36,6 +36,10 @@ assetx.yaml (config) → Asset Scanner → Code Generator → asset.x.dart (gene
 - **Extension Pattern**: Create extensions on `AssetX` class from `assetxf.dart` package
 - **Root Folder Classes**: Generate classes containing all root folder instances
 - **UID Generation**: Create unique identifiers for each asset to avoid naming conflicts
+- **🎉 CRITICAL: Hash-Based Folder Name Collision Resolution**: Use SHA256 hashes for unique class names while preserving readable getter names
+  - **Unique Class Names**: `Images1_07114823` vs `Images1_f0a72449` prevent conflicts
+  - **Readable Getters**: `images1`, `images11` with automatic conflict numbering
+  - **Path-Based Hashing**: Full folder path ensures uniqueness across directory structures
 - **Proper Generator Delegation**: CodeGenerationService coordinates, generators provide expertise
   - **Enhanced BaseGenerator**: FileAccessor class for structured accessor information
   - **Type-Safe Accessors**: Generators provide correct types (Image, Map, Future, etc.)
@@ -45,6 +49,8 @@ assetx.yaml (config) → Asset Scanner → Code Generator → asset.x.dart (gene
   - **Regular**: Generate path constants for Flutter's `Image.asset()`
 - **Dual Access Classes**: Generate both `$files` and `$paths` accessors
 - **Configuration-Driven**: Mode selection per asset type or globally
+- **Format Exclusion**: ICO files excluded from generators due to Flutter ImageCodec limitations
+- **toInternalPath Utility**: Converts package paths for same-package usage without redundant prefixes
 
 ### Asset Type Handling
 - **Predefined Types**: `["image_hard", "image_soft", "kv_hard", "kv_soft"]` from builtin.dart
